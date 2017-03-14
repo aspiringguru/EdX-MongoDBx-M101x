@@ -19,11 +19,26 @@ mongodb.MongoClient.connect(uri, function(error, db) {
       rating : 'PG'
     };
     */
+
+    /*
     var doc = {
       title : 'Jaws 2',
       year : 1976,
       director : 'Stephen Speilberg',
       rating : 'PG'
+    };
+    */
+
+    var doc = {
+      title : 'Jaws',
+      year : 1975,
+      director : 'Stephen Speilberg',
+      rating : 'AO',
+      ratings : {
+        critics: 80,
+        audience: 97
+      },
+      screenplay: ['Peter Benchley', 'Carl Gotlieb']
     };
 
 
@@ -33,18 +48,32 @@ mongodb.MongoClient.connect(uri, function(error, db) {
         console.log(error);
         process.exit(1);
       }
-      var query = { year : 1976 };
-      db.collection('movies').find(query).toArray(function(error, docs) {
+      var query = { year : 1976, rating: 'PG' };
+      db.collection('movies').find({ screenplay : 'Peter Benchley'}).toArray(function(error, docs) {
         if (error) {
           console.log(error);
           process.exit(1);
         }
+        console.log('list all database entries matching query', query)
         console.log('Found docs:');
         docs.forEach(function(doc) {
-          console.log(JSON.stringify(doc));
+          console.log("1:", JSON.stringify(doc));
         });
-        process.exit(0);
+        //process.exit(0);
       });
+    });
+    //now list all rows in database
+    db.collection('movies').find().toArray(function(error, docs) {
+      if (error) {
+        console.log(error);
+        process.exit(1);
+      }
+      console.log('list all database entries')
+      console.log('Found docs:');
+      docs.forEach(function(doc) {
+        console.log("2:", JSON.stringify(doc));
+      });
+      //process.exit(0);
     });
 });
 
@@ -52,4 +81,6 @@ mongodb.MongoClient.connect(uri, function(error, db) {
 //Found docs:
 //{"_id":"58c74eea19f23548206e2dc1","title":"Jaws","year":1975,"director":"Stephen Speilberg","rating":"PG"}
 //NB: keeps adding row of data to movies. have not designed system to prevent this.
+
+//NBB: needs work to fix the process.exit conditions.
 

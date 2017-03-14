@@ -19,11 +19,21 @@ mongodb.MongoClient.connect(uri, function(error, db) {
       rating : 'PG'
     };
     */
+
+    /*
     var doc = {
       title : 'Jaws 2',
       year : 1976,
       director : 'Stephen Speilberg',
       rating : 'PG'
+    };
+    */
+
+    var doc = {
+      title : 'Rocky Horror',
+      year : 1976,
+      director : 'Jim Sharman',
+      rating : 'AO'
     };
 
 
@@ -33,12 +43,13 @@ mongodb.MongoClient.connect(uri, function(error, db) {
         console.log(error);
         process.exit(1);
       }
-      var query = { year : 1976 };
+      var query = { year : 1976, rating: 'PG' };
       db.collection('movies').find(query).toArray(function(error, docs) {
         if (error) {
           console.log(error);
           process.exit(1);
         }
+        console.log('list all database entries matching query', query)
         console.log('Found docs:');
         docs.forEach(function(doc) {
           console.log(JSON.stringify(doc));
@@ -46,10 +57,27 @@ mongodb.MongoClient.connect(uri, function(error, db) {
         process.exit(0);
       });
     });
+    //now list all rows in database
+    /*
+    db.collection('movies').find().toArray(function(error, docs) {
+      if (error) {
+        console.log(error);
+        process.exit(1);
+      }
+      console.log('list all database entries')
+      console.log('Found docs:');
+      docs.forEach(function(doc) {
+        console.log(JSON.stringify(doc));
+      });
+      process.exit(0);
+    });
+    */
 });
 
 //execute with 'node crud-example.js'
 //Found docs:
 //{"_id":"58c74eea19f23548206e2dc1","title":"Jaws","year":1975,"director":"Stephen Speilberg","rating":"PG"}
 //NB: keeps adding row of data to movies. have not designed system to prevent this.
+
+//NBB: asynchronous issues cause console.log stuff to appear not in order.
 
