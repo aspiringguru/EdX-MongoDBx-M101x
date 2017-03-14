@@ -1,5 +1,5 @@
 {
   "dependencies": {
-    "mongodb": "2.0.35"
+    "mocha": "2.2.4"
   }
 }
